@@ -174,6 +174,8 @@ namespace imguipp {
 		m_commandQueue->Signal(m_fence, fenceValue);
 		m_fenceLastSignal = fenceValue;
 		frame->FenceValue = fenceValue;
+
+		QueueRender();
 	}
 
 	void Dx12Window::OnResized()

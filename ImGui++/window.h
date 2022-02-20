@@ -5,6 +5,7 @@
 #include <functional>
 #include <thread>
 #include <mutex>
+#include <queue>
 
 namespace imguipp {
 	class Window {
@@ -28,8 +29,27 @@ namespace imguipp {
 		Point GetLocation() const;
 		void OnClose(std::function<void()> callback);
 
+		/**
+		 * Queue a work action to be executed on render thread. Use this for manipulation
+		 * that does not require thread safety.
+		 * 
+		 * For thread safety, please use QueueSafeAction(std::function<void()> action).
+		 * 
+		 * @param action Action to perform on render thread.
+		 */
+		void QueueAction(std::function<void()> action);
+
+		/**
+		 * Thread-safe implementation of QueueAction(std::function<void()>. This is
+		 * used for property manipulation.
+		 * 
+		 * @param action Action to perform on render thread.
+		 */
+		void QueueSafeAction(std::function<void()> action);
+
 	
 	protected:
+		void QueueRender();
 		void RenderChildren();
 		void TriggerOnCloseEvent();
 		virtual void OnWindowTitleChanged() = 0;
@@ -44,6 +64,8 @@ namespace imguipp {
 
 		std::thread m_renderThread;
 		std::mutex m_renderMutex;
+		std::mutex m_workMutex;
+		std::queue<std::function<void()>> m_workQueue;
 		bool m_running;
 		std::string m_windowTitle;
 		std::function<void()> m_onCloseCallback;

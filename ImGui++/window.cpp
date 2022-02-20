@@ -93,6 +93,24 @@ namespace imguipp {
 	{
 		m_onCloseCallback = callback;
 	}
+	void Window::QueueAction(std::function<void()> action)
+	{
+		std::lock_guard<std::mutex> lock(m_workMutex);
+		m_workQueue.push(action);
+	}
+	void Window::QueueSafeAction(std::function<void()> action)
+	{
+		QueueAction([this, action] {
+			std::lock_guard<std::mutex> lock(m_renderMutex);
+			action();
+		});
+	}
+	void Window::QueueRender()
+	{
+		QueueSafeAction([this] {
+			Render();
+		});
+	}
 	void Window::RenderChildren()
 	{
 		// TODO: Implement children.
@@ -113,9 +131,13 @@ namespace imguipp {
 
 		// main render thread
 		m_running = true;
-		m_renderThread = std::thread([this] {
+		QueueSafeAction([this] {
 			OnStart();
-			while (true)
+			Render();
+		});
+		m_renderThread = std::thread([this] {
+			// continue to process work queue
+			INFINITE_LOOP
 			{
 				m_renderMutex.lock();
 				bool running = m_running;
@@ -124,7 +146,16 @@ namespace imguipp {
 				if (!running)
 					break;
 
-				Render();
+				m_workMutex.lock();
+				if (m_workQueue.empty())
+				{
+					m_workMutex.unlock();
+					break;
+				}
+				std::function<void()> work = m_workQueue.front();
+				m_workQueue.pop();
+				m_workMutex.unlock();
+				work();
 			}
 		});
 	}
