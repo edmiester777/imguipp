@@ -1,5 +1,7 @@
 #pragma once
-#include "Common.h"
+
+#include "common.h"
+#include "widget.h"
 #include <vector>
 #include <string>
 #include <functional>
@@ -8,7 +10,7 @@
 #include <queue>
 
 namespace imguipp {
-	class Window {
+	class Window : public Widget {
 	public:
 		Window();
 		virtual ~Window();
@@ -20,6 +22,7 @@ namespace imguipp {
 		void EnableKeyboardNavigation();
 		void EnableGamepadNavigation();
 		void EnableDocking();
+		virtual void Render() = 0;
 
 		void SetTitle(std::string title, bool triggerEvent = true);
 		std::string GetTitle() const;
@@ -47,16 +50,16 @@ namespace imguipp {
 		 */
 		void QueueSafeAction(std::function<void()> action);
 
+		virtual void AddChild(std::shared_ptr<Widget> child) override;
+
 	
 	protected:
 		void QueueRender();
-		void RenderChildren();
 		void TriggerOnCloseEvent();
 		virtual void OnWindowTitleChanged() = 0;
 		virtual void OnResized() = 0;
 		virtual void OnMove() = 0;
 		virtual void OnStart();
-		virtual void Render() = 0;
 
 	private:
 		void StartRenderThread();

@@ -11,6 +11,12 @@ int main(int argc, char* argv[])
 	window->CaptureKeyboard(true);
 	window->EnableDocking();
 	window->EnableKeyboardNavigation();
+
+	{
+		std::shared_ptr<WindowWidget> wwidget(new WindowWidget("Example Window Widget"));
+		window->AddChild(wwidget);
+	}
+
 	window->Show();
 	window->Join();
 }

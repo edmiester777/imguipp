@@ -4,21 +4,21 @@ namespace imguipp
 {
 	struct Rect
 	{
-		int x;
-		int y;
-		int w;
-		int h;
+		float x;
+		float y;
+		float w;
+		float h;
 	};
 
 	struct Point
 	{
-		int x;
-		int y;
+		float x;
+		float y;
 	};
 
 	struct Size
 	{
-		int w;
-		int h;
+		float w;
+		float h;
 	};
 }

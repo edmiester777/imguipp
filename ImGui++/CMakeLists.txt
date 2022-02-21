@@ -7,7 +7,9 @@ set(IMGUI_SOURCES
 	"../third_party/imgui/imgui_widgets.cpp")
 
 set(LIB_SOURCES 
-	"window.cpp")
+	"window.cpp"
+	"widget.cpp"
+	"widgets/windowwidget.cpp")
 set(INCLUDE_LIBS )
 
 if (WIN32)

@@ -1,3 +1,6 @@
 #pragma once
-#include "Common.h"
-#include "Window.h"
+
+#include "common.h"
+#include "window.h"
+#include "widget.h"
+#include "widgets/windowwidget.h"

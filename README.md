@@ -6,7 +6,7 @@ frameworks do. This project aims to change that.
 ## TODO
 - [ ] Minimally implement Win32 window
 - [x] Minimally implement DirectX window
-- [ ] Base widget
+- [x] Base widget
 - [ ] Standard widgets (button, textbox, label, etc.)
 - [ ] Animation framework
 - [ ] Styles

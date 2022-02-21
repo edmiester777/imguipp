@@ -2,7 +2,7 @@
 #include "backend_includes.h"
 
 namespace imguipp {
-	Window::Window()
+	Window::Window() : Widget()
 	{
 		m_running = false;
 		m_windowTitle = "Untitled Window";
@@ -12,6 +12,7 @@ namespace imguipp {
 
 	Window::~Window()
 	{
+		Widget::~Widget();
 		Close();
 	}
 
@@ -105,16 +106,19 @@ namespace imguipp {
 			action();
 		});
 	}
+	void Window::AddChild(std::shared_ptr<Widget> child)
+	{
+		QueueSafeAction([this, child] {
+			Widget::AddChild(child);
+		});
+	}
 	void Window::QueueRender()
 	{
 		QueueSafeAction([this] {
 			Render();
 		});
 	}
-	void Window::RenderChildren()
-	{
-		// TODO: Implement children.
-	}
+
 	void Window::TriggerOnCloseEvent()
 	{
 		if (m_onCloseCallback)
