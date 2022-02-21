@@ -46,6 +46,20 @@ namespace imguipp {
 	{
 		return m_bounds;
 	}
+	void Widget::Clear()
+	{
+		m_children.clear();
+	}
+	void Widget::Remove(Widget* widget)
+	{
+		m_children.remove_if([this, widget](const std::shared_ptr<Widget> child) {
+			return widget == child.get();
+		});
+	}
+	void Widget::Remove(std::shared_ptr<Widget> widget)
+	{
+		m_children.remove(widget);
+	}
 	void Widget::RenderChildren()
 	{
 		std::list<std::shared_ptr<Widget>>::iterator iter;
@@ -57,5 +71,12 @@ namespace imguipp {
 	bool Widget::Showing()
 	{
 		return m_show;
+	}
+	void Widget::SetParent(std::shared_ptr<Widget> parent)
+	{
+		if (m_parent)
+			m_parent->Remove(this);
+
+		m_parent = parent;
 	}
 }

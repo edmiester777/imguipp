@@ -19,12 +19,17 @@ namespace imguipp {
 		void SetPosition(Point position);
 		const Rect& GetBounds();
 
+		void Clear();
+		void Remove(Widget* widget);
+		void Remove(std::shared_ptr<Widget> widget);
 
 	protected:
 		void RenderChildren();
 		bool Showing();
 
 	private:
+		void SetParent(std::shared_ptr<Widget> parent);
+
 		std::shared_ptr<Widget> m_parent;
 		std::list<std::shared_ptr<Widget>> m_children;
 		Rect m_bounds;

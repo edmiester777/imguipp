@@ -1,6 +1,8 @@
 #include <imguipp.h>
 #include <impl/dx12_window.h>
 #include <memory>
+#include <thread>
+#include <chrono>
 
 using namespace imguipp;
 
@@ -11,7 +13,7 @@ int main(int argc, char* argv[])
 	window->CaptureKeyboard(true);
 	window->EnableDocking();
 	window->EnableKeyboardNavigation();
-
+	
 	{
 		std::shared_ptr<WindowWidget> wwidget(new WindowWidget("Example Window Widget"));
 		window->AddChild(wwidget);

@@ -24,6 +24,7 @@ namespace imguipp {
 
 	WindowWidget::~WindowWidget()
 	{
+		Widget::~Widget();
 	}
 
 	void WindowWidget::SetTitle(std::string title)
